@@ -30,6 +30,10 @@ const createOrUpdateEvent = (event) => {
   }
 };
 
+const addMusicianToEvent = (eventId, musicianId) => {
+  eventsService.addMusicianToEvent(eventId, musicianId);
+};
+
 export default {
   getAllEvents,
   createEvent,
@@ -37,4 +41,5 @@ export default {
   removeEvent,
   getEventById,
   createOrUpdateEvent,
+  addMusicianToEvent,
 };

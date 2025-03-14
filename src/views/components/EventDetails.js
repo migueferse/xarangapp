@@ -1,29 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import eventsController from "../../controllers/eventsController";
+import musiciansController from "../../controllers/musiciansController";
 import "../../styles/events.css";
 
-const EventDetailsPage = () => {
+const EventDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
+    place: "",
     date: "",
+    musicians: [],
   });
+
+  const [allMusicians, setAllMusicians] = useState([]);
 
   useEffect(() => {
     if (id) {
-      const event = eventsController.getEventById(Number(id));
+      const event = eventsController.getEventById(id);
       if (event) {
         setFormData(event);
       }
     }
+
+    setAllMusicians(musiciansController.getAllMusicians());
   }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleMusicianSelect = (e) => {
+    const selectedOptions = Array.from(e.target.selectedOptions).map((option) => option.value);
+    setFormData({ ...formData, musicians: selectedOptions });
   };
 
   const handleSubmit = (e) => {
@@ -47,7 +59,7 @@ const EventDetailsPage = () => {
           />
         </div>
         <div className="form-group">
-          <label>Fecha del Evento (YYYY-MM-DD):</label>
+          <label>Fecha:</label>
           <input
             type="date"
             name="date"
@@ -55,6 +67,21 @@ const EventDetailsPage = () => {
             onChange={handleChange}
             required
           />
+        </div>
+        <div className="form-group">
+          <label>Músicos:</label>
+          <select
+            multiple
+            value={formData.musicians}
+            onChange={handleMusicianSelect}
+            className="form-control"
+          >
+            {allMusicians.map((musician) => (
+              <option key={musician.id} value={musician.id}>
+                {musician.name} ({musician.instrument})
+              </option>
+            ))}
+          </select>
         </div>
         <button type="submit" className="btn btn-primary">
           {id ? "Guardar Cambios" : "Crear Evento"}
@@ -64,4 +91,4 @@ const EventDetailsPage = () => {
   );
 };
 
-export default EventDetailsPage;
+export default EventDetailPage;

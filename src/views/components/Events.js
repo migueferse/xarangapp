@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import eventsController from '../../controllers/eventsController';
+import musiciansController from "../../controllers/musiciansController";
 import '../../styles/events.css';
 
 const Events = () => {
@@ -34,6 +35,10 @@ const Events = () => {
         {events.map((event) => (
           <li key={event.id} className="event-item">
             <span>{event.name} - {event.date}</span>
+            <div>Músicos: {event.musicians.map((musicianId) => {
+              const musician = musiciansController.getMusicianById(musicianId);
+              return musician ? musician.name : "";
+            }).join(", ")}</div>
             <button onClick={() => handleEdit(event.id)} className="btn btn-warning">Editar</button>
             <button onClick={() => handleDelete(event.id)} className="btn btn-danger">Eliminar</button>
           </li>
