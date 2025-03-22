@@ -11,18 +11,34 @@ const MusicianDetailPage = () => {
     name: "",
     lastName: "",
     nickname: "",
-    instrument: "",
+    instrument_id: "",
     phone: "",
     email: "",
   });
 
+  const [instruments, setInstruments] = useState([]);
+
   useEffect(() => {
-    if (id) {
-      const musician = musiciansController.getMusicianById(id);
-      if (musician) {
-        setFormData(musician);
+    const fetchData = async () => {
+      try {
+        const instrumentData = await musiciansController.getInstruments();
+        setInstruments(instrumentData);
+
+        if (id) {
+          const musician = await musiciansController.getMusicianById(id);
+          if (musician) {
+            setFormData({
+              ...musician,
+              instrument_id: musician.instrument_id || "",
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
       }
-    }
+    };
+
+    fetchData();
   }, [id]);
 
   const handleChange = (e) => {
@@ -30,10 +46,18 @@ const MusicianDetailPage = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    musiciansController.createOrUpdateMusician(formData);
-    navigate("/musicians");
+    try {
+      if (id) {
+        await musiciansController.updateMusician(id, formData);
+      } else {
+        await musiciansController.createMusician(formData);
+      }
+      navigate("/musicians");
+    } catch (error) {
+      console.error("Error saving musician:", error);
+    }
   };
 
   return (
@@ -71,13 +95,18 @@ const MusicianDetailPage = () => {
         </div>
         <div className="form-group">
           <label>Instrumento:</label>
-          <input
-            type="text"
-            name="instrument"
-            value={formData.instrument}
-            onChange={handleChange}
-            required
-          />
+          <select name="instrument_id" value={formData.instrument_id || ""} onChange={handleChange} required>
+            <option value="">Selecciona un instrumento</option>
+            {instruments.length > 0 ? (
+              instruments.map((instrument) => (
+                <option key={instrument.id} value={instrument.id}>
+                  {instrument.name}
+                </option>
+              ))
+            ) : (
+              <option disabled>Cargando instrumentos...</option>
+            )}
+          </select>
         </div>
         <div className="form-group">
           <label>Teléfono:</label>

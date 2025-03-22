@@ -1,33 +1,65 @@
-const musicians = [
-  { id: 1, name: "Miguel Ángel", lastName: "Fernández", nickname: "Migue", instrument: "Saxo Tenor", phone: "123456789", email: "migue@a.com" },
-  { id: 2, name: "Jose Luis", lastName: "Dominguez", nickname: "Jose", instrument: "Caja", phone: "987654321", email: "jose@a.com" },
-  { id: 3, name: "Raúl", lastName:"Sanz", nickname: "Diavolo", instrument: "Bombo", phone: "555555555", email: "raul@a.com"  },
-];
+import API from "../api/axios";
 
-const getMusicians = () => {
-  return [...musicians];
-};
-
-const getMusicianById = (id) => {
-  return musicians.find((musician) => musician.id === parseInt(id));
-};
-
-const addMusician = (newMusician) => {
-  newMusician.id = musicians.length + 1;
-  musicians.push(newMusician);
-};
-
-const editMusician = (id, updatedMusician) => {
-  const index = musicians.findIndex((musician) => musician.id === id);
-  if (index !== -1) {
-    musicians[index] = { ...musicians[index], ...updatedMusician };
+const getMusicians = async () => {
+  try {
+    const response = await API.get("/musicians");
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching musicians:", error);
+    throw error;
   }
 };
 
-const deleteMusician = (id) => {
-  const index = musicians.findIndex((musician) => musician.id === id);
-  if (index !== -1) {
-    musicians.splice(index, 1);
+const getMusicianById = async (id) => {
+  try {
+    const response = await API.get(`/musicians/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching musician:", error);
+    throw error;
+  }
+};
+
+const addMusician = async (newMusician) => {
+  console.log('Created', newMusician);
+  try {
+    console.log(newMusician);
+    const response = await API.post("/musicians", newMusician);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding musician:", error);
+    throw error;
+  }
+};
+
+const editMusician = async (id, updatedMusician) => {
+  console.log('Updated',updatedMusician);
+  try {
+    const response = await API.put(`/musicians/${id}`, updatedMusician);
+    return response.data;
+  } catch (error) {
+    console.error("Error editing musician:", error);
+    throw error;
+  }
+};
+
+const deleteMusician = async (id) => {
+  try {
+    await API.delete(`/musicians/${id}`);
+  } catch (error) {
+    console.error("Error deleting musician:", error);
+    throw error;
+  }
+};
+
+const getInstruments = async () => {
+  try {
+    const response = await API.get("/instruments");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching instruments:", error);
+    throw error;
   }
 };
 
@@ -37,4 +69,5 @@ export default {
   addMusician,
   editMusician,
   deleteMusician,
+  getInstruments,
 };
