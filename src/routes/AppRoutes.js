@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import LoginPage from '../views/pages/LoginPage';
 import EventsPage from '../views/pages/EventsPage';
 import ScoresPage from '../views/pages/ScoresPage';
-import CalendarPage from '../views/pages/CalendarPage';
+import EventsCalendarPage from '../views/pages/EventsCalendarPage';
 import MusiciansPage from '../views/pages/MusiciansPage';
 import MusicianDetailPage from '../views/pages/MusicianDetailsPage';
 import EventDetailsPage from "../views/pages/EventDetailsPage";
@@ -16,7 +16,7 @@ const AppRoutes = () => {
       <Route path="/events/new" element={<EventDetailsPage />} />
       <Route path="/events/:id" element={<EventDetailsPage />} />
       <Route path="/scores" element={<ScoresPage />} />
-      <Route path="/calendar" element={<CalendarPage />} />
+      <Route path="/calendar" element={<EventsCalendarPage />} />
       <Route path="/musicians" element={<MusiciansPage />} />
       <Route path="/musicians/new" element={<MusicianDetailPage />} />
       <Route path="/musicians/:id" element={<MusicianDetailPage />} />
