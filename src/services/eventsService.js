@@ -1,43 +1,64 @@
-const events = [
-  { id: 1, name: "Moros i Cristians Torrent", date: "2024-06-15", musicians: [] },
-  { id: 2, name: "Despedida solter", date: "2024-07-20", musicians: [] },
-  { id: 3, name: "Festes del poble", date: "2024-08-05", musicians: [] },
-];
+import API from "../api/axios";
 
-const getEvents = () => {
-  return [...events];
-};
-
-const getEventById = (id) => {
-  return events.find((event) => event.id === parseInt(id));
-};
-
-const addEvent = (newEvent) => {
-  newEvent.id = events.length + 1;
-  events.push(newEvent);
-};
-
-const editEvent = (id, updatedEvent) => {
-  const index = events.findIndex((event) => event.id === id);
-  if (index !== -1) {
-    events[index] = { ...events[index], ...updatedEvent };
+const getEvents = async () => {
+  try {
+    const response = await API.get("/events");
+    console.log('Events', response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    throw error;
   }
 };
 
-const deleteEvent = (id) => {
-  const index = events.findIndex((event) => event.id === id);
-  if (index !== -1) {
-    events.splice(index, 1);
+const getEventById = async (id) => {
+  try {
+    const response = await API.get(`/events/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    throw error;
   }
-  
 };
 
-const addMusicianToEvent = (eventId, musicianId) => {
-  const event = getEventById(eventId);
-  if (event) {
-    event.musicians.push(musicianId);
+const addEvent = async (newEvent) => {
+  console.log('Created', newEvent);
+  try {
+    console.log(newEvent);
+    const response = await API.post("/events", newEvent);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding event:", error);
+    throw error;
   }
 };
+
+const editEvent = async (id, updatedEvent) => {
+  console.log('Updated',updatedEvent);
+  try {
+    const response = await API.put(`/events/${id}`, updatedEvent);
+    return response.data;
+  } catch (error) {
+    console.error("Error editing event:", error);
+    throw error;
+  }
+};
+
+const deleteEvent = async (id) => {
+  try {
+    await API.delete(`/events/${id}`);
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    throw error;
+  }  
+};
+
+// const addMusicianToEvent = (eventId, musicianId) => {
+//   const event = getEventById(eventId);
+//   if (event) {
+//     event.musicians.push(musicianId);
+//   }
+// };
 
 
 export default {
@@ -46,5 +67,5 @@ export default {
   addEvent,
   editEvent,
   deleteEvent,
-  addMusicianToEvent,
+  // addMusicianToEvent,
 };

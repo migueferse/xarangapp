@@ -43,20 +43,24 @@ const MusiciansPage = () => {
       }
     }
   };
-  
+
 
   return (
     <div className="container">
       <h2>Músicos</h2>
       <button onClick={handleCreate} className="btn btn-primary mb-3">Agregar Músico</button>
       <ul className="musician-list">
-        {musicians.map((musician) => (
-          <li key={musician.id} className="musician-item">
-            <span>{musician.name} (Apodo: {musician.nickname}) - {musician.instrumentName}</span>
-            <button onClick={() => handleEdit(musician.id)} className="btn btn-warning">Editar</button>
-            <button onClick={() => handleDelete(musician.id)} className="btn btn-danger">Eliminar</button>
-          </li>
-        ))}
+        {musicians.length > 0 ? (
+          musicians.map((musician) => (
+            <li key={musician.id} className="musician-item">
+              <span>{musician.name} (Apodo: {musician.nickname}) - {musician.instrument.name}</span>
+              <button onClick={() => handleEdit(musician.id)} className="btn btn-warning">Editar</button>
+              <button onClick={() => handleDelete(musician.id)} className="btn btn-danger">Eliminar</button>
+            </li>
+          ))
+        ) : (
+          <p>No hay musicos disponibles</p>
+        )}
       </ul>
     </div>
   );

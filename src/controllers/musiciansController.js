@@ -2,16 +2,8 @@ import musiciansService from "../services/musiciansService";
 
 const getAllMusicians = async () => {
   try {
-    const musicians = await musiciansService.getMusicians();
-    const instruments = await musiciansService.getInstruments();
-
-    return musicians.map(musician => {
-      const instrument = instruments.find(inst => inst.id === musician.instrument_id);
-      return {
-        ...musician,
-        instrumentName: instrument ? instrument.name : "Sin instrumento"
-      };
-    });
+    const musiciansData = await musiciansService.getMusicians();
+    return musiciansData;
   } catch (error) {
     console.error("Error fetching musicians:", error);
     throw error;

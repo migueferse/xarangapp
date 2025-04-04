@@ -18,14 +18,28 @@ const EventDetailPage = () => {
   const [allMusicians, setAllMusicians] = useState([]);
 
   useEffect(() => {
-    if (id) {
-      const event = eventsController.getEventById(id);
-      if (event) {
-        setFormData(event);
-      }
-    }
+    const fetchData = async () => {
+      try {
+        const musiciansData = await musiciansController.getAllMusicians();
+        setAllMusicians(musiciansData);
 
-    setAllMusicians(musiciansController.getAllMusicians());
+        if (id) {
+          const eventData = await eventsController.getEventById(id);
+          if (eventData) {
+            setFormData({
+              name: eventData.name,
+              place: eventData.place,
+              date: eventData.date,
+              musicians: eventData.musicians.map(m => m.id.toString()) || []
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    fetchData();
   }, [id]);
 
   const handleChange = (e) => {
@@ -34,14 +48,24 @@ const EventDetailPage = () => {
   };
 
   const handleMusicianSelect = (e) => {
-    const selectedOptions = Array.from(e.target.selectedOptions).map((option) => option.value);
+    const selectedOptions = Array.from(e.target.selectedOptions).map(
+      (option) => option.value
+    );
     setFormData({ ...formData, musicians: selectedOptions });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    eventsController.createOrUpdateEvent(formData);
-    navigate("/events");
+  const handleSubmit = async (e) => {
+    e.preventDefault();    
+    try {
+      if (id) {
+        await eventsController.updateEvent(id, formData);
+      } else {
+        await eventsController.createEvent(formData);
+      }
+      navigate("/events");
+    } catch (error) {
+      console.error("Error submitting event:", error);
+    }
   };
 
   return (
@@ -69,6 +93,16 @@ const EventDetailPage = () => {
           />
         </div>
         <div className="form-group">
+          <label>Lugar:</label>
+          <input
+            type="text"
+            name="place"
+            value={formData.place}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
           <label>Músicos:</label>
           <select
             multiple
@@ -78,7 +112,7 @@ const EventDetailPage = () => {
           >
             {allMusicians.map((musician) => (
               <option key={musician.id} value={musician.id}>
-                {musician.name} ({musician.instrument})
+                {musician.name} ({musician.instrument.name})
               </option>
             ))}
           </select>

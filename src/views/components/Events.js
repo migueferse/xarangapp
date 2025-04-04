@@ -6,24 +6,42 @@ import '../../styles/events.css';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
-   const navigate = useNavigate();
+  const [instruments, setInstruments] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setEvents(eventsController.getAllEvents());
+    const fetchData = async () => {
+      try {
+        const eventsData = await eventsController.getAllEvents();
+        setEvents(eventsData);
+
+        const instrumentsData = await musiciansController.getInstruments();
+        setInstruments(instrumentsData);
+      } catch (error) {
+        console.error("Error fetching events or instruments:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleCreate = () => {
     navigate("/events/new");
   };
-  
+
   const handleEdit = (id) => {
     navigate(`/events/${id}`);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este evento?")) {
-      eventsController.removeEvent(id);
-      setEvents(eventsController.getAllEvents());
+      try {
+        await eventsController.removeEvent(id);
+        const updatedEvents = await eventsController.getAllEvents();
+        setEvents(updatedEvents);
+      } catch (error) {
+        console.error("Error deleting event:", error);
+      }
     }
   };
 
@@ -32,17 +50,37 @@ const Events = () => {
       <h2>Eventos</h2>
       <button onClick={handleCreate} className="btn btn-primary mb-3">Crear Evento</button>
       <ul className="event-list">
-        {events.map((event) => (
-          <li key={event.id} className="event-item">
-            <span>{event.name} - {event.date}</span>
-            <div>Músicos: {event.musicians.map((musicianId) => {
-              const musician = musiciansController.getMusicianById(musicianId);
-              return musician ? musician.name : "";
-            }).join(", ")}</div>
-            <button onClick={() => handleEdit(event.id)} className="btn btn-warning">Editar</button>
-            <button onClick={() => handleDelete(event.id)} className="btn btn-danger">Eliminar</button>
-          </li>
-        ))}
+        {events.length > 0 ? (
+          events.map((event) => (
+            <li key={event.id} className="event-item">
+              <span>{event.name} - {event.date} ({event.place})</span>
+              <div>
+                <strong>Músicos:</strong>
+                {event.musicians.length > 0 ? (
+                  <ul>
+                    {event.musicians.map((musician) => {
+                      const instrumentName = musician.instrument
+                        ? musician.instrument.name
+                        : instruments.find(inst => inst.id === musician.instrument_id)?.name || "Instrumento desconocido";
+                      
+                      return (
+                        <li key={musician.id}>
+                          {musician.nickname ? musician.nickname : `${musician.name}`} - {instrumentName}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <p>No hay músicos asignados a este evento.</p>
+                )}
+              </div>
+              <button onClick={() => handleEdit(event.id)} className="btn btn-warning">Editar</button>
+              <button onClick={() => handleDelete(event.id)} className="btn btn-danger">Eliminar</button>
+            </li>
+          ))
+        ) : (
+          <p>No hay eventos disponibles</p>
+        )}
       </ul>
     </div>
   );

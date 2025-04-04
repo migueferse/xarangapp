@@ -3,7 +3,7 @@ import API from "../api/axios";
 const getMusicians = async () => {
   try {
     const response = await API.get("/musicians");
-    console.log(response.data);
+    console.log('Musicos', response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching musicians:", error);
@@ -22,7 +22,6 @@ const getMusicianById = async (id) => {
 };
 
 const addMusician = async (newMusician) => {
-  console.log('Created', newMusician);
   try {
     console.log(newMusician);
     const response = await API.post("/musicians", newMusician);
@@ -34,7 +33,6 @@ const addMusician = async (newMusician) => {
 };
 
 const editMusician = async (id, updatedMusician) => {
-  console.log('Updated',updatedMusician);
   try {
     const response = await API.put(`/musicians/${id}`, updatedMusician);
     return response.data;
