@@ -1,8 +1,13 @@
 import eventsService from "../services/eventsService";
 
+const getAuthToken = () => {
+  return sessionStorage.getItem('authToken');
+};
+
 const getAllEvents = async () => {
+  const token = getAuthToken();
   try {
-    const events = await eventsService.getEvents();
+    const events = await eventsService.getEvents(token);
     return events;
   } catch (error) {
     console.error("Error fetching events:", error);
@@ -11,19 +16,23 @@ const getAllEvents = async () => {
 };
 
 const createEvent = async (eventData) => {
-  return await eventsService.addEvent(eventData);
+  const token = getAuthToken();
+  return await eventsService.addEvent(eventData, token);
 };
 
 const updateEvent = async (id, updatedData) => {
-  return await eventsService.editEvent(id, updatedData);
+  const token = getAuthToken();
+  return await eventsService.editEvent(id, updatedData, token);
 };
 
 const removeEvent = async (id) => {
-  return await eventsService.deleteEvent(id);
+  const token = getAuthToken();
+  return await eventsService.deleteEvent(id, token);
 };
 
 const getEventById = async (id) => {
-  return await eventsService.getEventById(id);
+  const token = getAuthToken();
+  return await eventsService.getEventById(id, token);
 };
 
 // const createOrUpdateEvent = (event) => {

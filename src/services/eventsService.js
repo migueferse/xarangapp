@@ -1,8 +1,12 @@
 import API from "../api/axios";
 
-const getEvents = async () => {
+const getEvents = async (token) => {
   try {
-    const response = await API.get("/events");
+    const response = await API.get("/events", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log('Events', response.data);
     return response.data;
   } catch (error) {
@@ -11,9 +15,13 @@ const getEvents = async () => {
   }
 };
 
-const getEventById = async (id) => {
+const getEventById = async (id, token) => {
   try {
-    const response = await API.get(`/events/${id}`);
+    const response = await API.get(`/events/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching event:", error);
@@ -21,11 +29,15 @@ const getEventById = async (id) => {
   }
 };
 
-const addEvent = async (newEvent) => {
+const addEvent = async (newEvent, token) => {
   console.log('Created', newEvent);
   try {
     console.log(newEvent);
-    const response = await API.post("/events", newEvent);
+    const response = await API.post("/events", newEvent, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error adding event:", error);
@@ -33,10 +45,14 @@ const addEvent = async (newEvent) => {
   }
 };
 
-const editEvent = async (id, updatedEvent) => {
+const editEvent = async (id, updatedEvent, token) => {
   console.log('Updated',updatedEvent);
   try {
-    const response = await API.put(`/events/${id}`, updatedEvent);
+    const response = await API.put(`/events/${id}`, updatedEvent, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error editing event:", error);
@@ -44,9 +60,13 @@ const editEvent = async (id, updatedEvent) => {
   }
 };
 
-const deleteEvent = async (id) => {
+const deleteEvent = async (id, token) => {
   try {
-    await API.delete(`/events/${id}`);
+    await API.delete(`/events/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   } catch (error) {
     console.error("Error deleting event:", error);
     throw error;

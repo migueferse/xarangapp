@@ -33,3 +33,13 @@
 .download-link:hover {
   color: #218838;
 }
+
+.delete-button {
+  margin-left: 1rem;
+  background-color: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}

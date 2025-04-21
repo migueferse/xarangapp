@@ -1,8 +1,13 @@
 import musiciansService from "../services/musiciansService";
 
+const getAuthToken = () => {
+  return sessionStorage.getItem('authToken');
+};
+
 const getAllMusicians = async () => {
+  const token = getAuthToken();
   try {
-    const musiciansData = await musiciansService.getMusicians();
+    const musiciansData = await musiciansService.getMusicians(token);
     return musiciansData;
   } catch (error) {
     console.error("Error fetching musicians:", error);
@@ -11,21 +16,25 @@ const getAllMusicians = async () => {
 };
 
 const createMusician = async (musicianData) => {
-  return await musiciansService.addMusician(musicianData);
+  const token = getAuthToken();
+  return await musiciansService.addMusician(musicianData, token);
 };
 
 const updateMusician = async (id, updatedData) => {
-  return await musiciansService.editMusician(id, updatedData);
+  const token = getAuthToken();
+  return await musiciansService.editMusician(id, updatedData, token);
 };
 
 const removeMusician = async (id) => {
-  return await musiciansService.deleteMusician(id);
+  const token = getAuthToken();
+  return await musiciansService.deleteMusician(id, token);
 };
 
 const getMusicianById = async (id) => {
+  const token = getAuthToken();
   try {
-    const musician = await musiciansService.getMusicianById(id);
-    const instruments = await musiciansService.getInstruments();
+    const musician = await musiciansService.getMusicianById(id, token);
+    const instruments = await musiciansService.getInstruments(token);
 
     if (musician) {
       const selectedInstrument = instruments.find(inst => inst.id === musician.instrument_id);
@@ -41,8 +50,20 @@ const getMusicianById = async (id) => {
   }
 };
 
+const getMusicianDetails = async (id) => {
+  const token = getAuthToken();
+  try {
+    const musicianDetails = await musiciansService.getMusicianDetails(id, token);
+    return musicianDetails;
+  } catch (error) {
+    console.error("Error fetching musician details with events:", error);
+    throw error;
+  }
+};
+
 const getInstruments = async () => {
-  return await musiciansService.getInstruments();
+  const token = getAuthToken();
+  return await musiciansService.getInstruments(token);
 };
 
 // const createOrUpdateMusician = async (musician) => {
@@ -66,6 +87,7 @@ export default {
   updateMusician,
   removeMusician,
   getMusicianById,
+  getMusicianDetails,
   getInstruments,
   // createOrUpdateMusician,
 };

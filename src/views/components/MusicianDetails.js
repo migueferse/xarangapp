@@ -1,137 +1,80 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import musiciansController from "../../controllers/musiciansController";
-import '../../styles/musicians.css';
+import '../../styles/musicians.css'; // Asegúrate de tener estilos
 
-const MusicianDetailPage = () => {
+const MusicianDetailsPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    name: "",
-    lastName: "",
-    nickname: "",
-    instrument_id: "",
-    phone: "",
-    email: "",
-  });
-
-  const [instruments, setInstruments] = useState([]);
+  const [musician, setMusician] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMusicianDetails = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const instrumentData = await musiciansController.getInstruments();
-        setInstruments(instrumentData);
-
-        if (id) {
-          const musician = await musiciansController.getMusicianById(id);
-          if (musician) {
-            setFormData({
-              ...musician,
-              instrument_id: musician.instrument_id || "",
-            });
-          }
-        }
-      } catch (error) {
-        console.error("Error loading data:", error);
+        const data = await musiciansController.getMusicianDetails(id);
+        setMusician(data);
+      } catch (err) {
+        setError("Error al cargar los detalles del músico.");
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchData();
+    fetchMusicianDetails();
   }, [id]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  if (loading) {
+    return <div>Cargando detalles del músico...</div>;
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (id) {
-        await musiciansController.updateMusician(id, formData);
-      } else {
-        await musiciansController.createMusician(formData);
-      }
-      navigate("/musicians");
-    } catch (error) {
-      console.error("Error saving musician:", error);
-    }
-  };
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
+  if (!musician) {
+    return <div>Músico no encontrado.</div>;
+  }
 
   return (
     <div className="container">
-      <h2>{id ? "Editar Músico" : "Crear Nuevo Músico"}</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Nombre:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Apellidos:</label>
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Apodo:</label>
-          <input
-            type="text"
-            name="nickname"
-            value={formData.nickname}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Instrumento:</label>
-          <select name="instrument_id" value={formData.instrument_id || ""} onChange={handleChange} required>
-            <option value="">Selecciona un instrumento</option>
-            {instruments.length > 0 ? (
-              instruments.map((instrument) => (
-                <option key={instrument.id} value={instrument.id}>
-                  {instrument.name}
-                </option>
-              ))
-            ) : (
-              <option disabled>Cargando instrumentos...</option>
-            )}
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Teléfono:</label>
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label>Correo Electrónico:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">
-          {id ? "Guardar Cambios" : "Crear Músico"}
-        </button>
-      </form>
+      <h2>Detalles del Músico: {musician.name} {musician.lastName}</h2>      
+      <div className="form-group">
+        <label>Apodo:</label>
+        <p>{musician.nickname || 'No asignado'}</p>
+      </div>
+      <div className="form-group">
+        <label>Instrumento:</label>
+        <p>{musician.instrument?.name || 'No asignado'}</p>
+      </div>
+      <div className="form-group">
+        <label>Teléfono:</label>
+        <p>{musician.phone || 'No asignado'}</p>
+      </div>
+      <div className="form-group">
+        <label>Correo Electrónico:</label>
+        <p>{musician.email || 'No asignado'}</p>
+      </div>
+
+      <div className="form-group">
+        <h3>Historial de Eventos:</h3>
+        {musician.events && musician.events.length > 0 ? (
+          <ul className="event-history-list">
+            {musician.events.map(event => (
+              <li key={event.id} className="event-history-item">
+                {event.name} - {new Date(event.date).toLocaleDateString()} ({event.place})
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>Este músico no ha participado en ningún evento aún.</p>
+        )}
+      </div>
     </div>
   );
 };
 
-export default MusicianDetailPage;
+export default MusicianDetailsPage;

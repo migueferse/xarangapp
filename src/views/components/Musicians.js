@@ -29,6 +29,10 @@ const MusiciansPage = () => {
   };
 
   const handleEdit = (id) => {
+    navigate(`/musicians/${id}/edit`);
+  };
+
+  const handleDetails = (id) => {
     navigate(`/musicians/${id}`);
   };
 
@@ -54,6 +58,7 @@ const MusiciansPage = () => {
           musicians.map((musician) => (
             <li key={musician.id} className="musician-item">
               <span>{musician.name} (Apodo: {musician.nickname}) - {musician.instrument.name}</span>
+              <button onClick={() => handleDetails(musician.id)} className="btn btn-info">Detalles</button>
               <button onClick={() => handleEdit(musician.id)} className="btn btn-warning">Editar</button>
               <button onClick={() => handleDelete(musician.id)} className="btn btn-danger">Eliminar</button>
             </li>
