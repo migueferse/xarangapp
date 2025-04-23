@@ -1,18 +1,36 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import loginService from '../services/loginService';
-import authService from '../services/authService'; // Importa el servicio de logout
+import authService from '../services/authService';
+import userService from '../services/userService';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = sessionStorage.getItem('authToken');
     setIsAuthenticated(!!token);
+    if (token) {
+      fetchUser(token);
+  }
   }, []);
+
+  const fetchUser = async (token) => {
+    try {
+        const userData = await userService.getUser(token); // Llama al servicio para obtener los datos del usuario
+        setUser(userData);
+    } catch (error) {
+        console.error('Error al obtener la información del usuario:', error);
+        setUser(null);
+        setIsAuthenticated(false);
+        sessionStorage.removeItem('authToken');
+        navigate('/login'); // Redirigir si falla la obtención del usuario (token inválido, etc.)
+    }
+};
 
   const login = async (credentials) => {
     try {
@@ -20,10 +38,12 @@ export const AuthProvider = ({ children }) => {
       if (response && response.token) {
         sessionStorage.setItem('authToken', response.token);
         setIsAuthenticated(true);
+        await fetchUser(response.token);
         navigate('/events'); // Redirigir después del login
         return true;
       } else {
         setIsAuthenticated(false);
+        setUser(null);
         return false;
       }
     } catch (error) {
@@ -46,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
