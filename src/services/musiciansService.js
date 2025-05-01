@@ -99,6 +99,48 @@ const getInstruments = async (token) => {
   }
 };
 
+const getPendingEvents = async (token) => {
+  try {
+      const response = await API.get("/musicians/pending-events", {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      return response.data;
+  } catch (error) {
+      console.error("Error fetching pending events:", error);
+      throw error;
+  }
+};
+
+const acceptEvent = async (eventId, token) => {
+  try {
+      const response = await API.post(`/events/${eventId}/accept`, {}, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      return response.data;
+  } catch (error) {
+      console.error("Error accepting event:", error);
+      throw error;
+  }
+};
+
+const rejectEvent = async (eventId, token) => {
+  try {
+      const response = await API.post(`/events/${eventId}/reject`, {}, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      return response.data;
+  } catch (error) {
+      console.error("Error rejecting event:", error);
+      throw error;
+  }
+};
+
 export default {
   getMusicians,
   getMusicianById,
@@ -107,4 +149,7 @@ export default {
   editMusician,
   deleteMusician,
   getInstruments,
+  getPendingEvents,
+  acceptEvent,
+  rejectEvent,
 };

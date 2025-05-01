@@ -66,6 +66,36 @@ const getInstruments = async () => {
   return await musiciansService.getInstruments(token);
 };
 
+const getPendingEvents = async () => {
+  const token = getAuthToken();
+  try {
+      return await musiciansService.getPendingEvents(token);
+  } catch (error) {
+      console.error("Error fetching pending events:", error);
+      throw error;
+  }
+};
+
+const acceptEvent = async (eventId) => {
+  const token = getAuthToken();
+  try {
+      return await musiciansService.acceptEvent(eventId, token);
+  } catch (error) {
+      console.error("Error accepting event:", error);
+      throw error;
+  }
+};
+
+const rejectEvent = async (eventId) => {
+  const token = getAuthToken();
+  try {
+      return await musiciansService.rejectEvent(eventId, token);
+  } catch (error) {
+      console.error("Error rejecting event:", error);
+      throw error;
+  }
+};
+
 // const createOrUpdateMusician = async (musician) => {
 //   try {
 //     if (musician.id) {
@@ -89,5 +119,8 @@ export default {
   getMusicianById,
   getMusicianDetails,
   getInstruments,
+  getPendingEvents,
+  acceptEvent,
+  rejectEvent,
   // createOrUpdateMusician,
 };

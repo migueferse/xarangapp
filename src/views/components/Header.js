@@ -11,6 +11,11 @@ const Header = () => {
           <li><NavLink to="/scores" className={({ isActive }) => (isActive ? 'active' : '')}>Partituras</NavLink></li>
           <li><NavLink to="/calendar" className={({ isActive }) => (isActive ? 'active' : '')}>Calendario</NavLink></li>
           <li><NavLink to="/musicians" className={({ isActive }) => (isActive ? 'active' : '')} >Músicos</NavLink></li>
+          {isAuthenticated && (
+                    <li>
+                        <NavLink to="/profile/pending-events" className={({ isActive }) => (isActive ? 'active' : '')}>Invitaciones</NavLink>
+                    </li>
+                )}
           {isAuthenticated ? (
           <li>
             <button onClick={logout} className="nav-link">Cerrar Sesión</button>

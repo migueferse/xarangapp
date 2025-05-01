@@ -9,6 +9,7 @@ import MusiciansPage from '../views/pages/MusiciansPage';
 import MusicianDetailPage from '../views/pages/MusicianDetailsPage';
 import MusicianFormPage from '../views/pages/MusicianFormPage';
 import EventDetailsPage from "../views/pages/EventDetailsPage";
+import PendingEvents from '../views/pages/PendingEvents';
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const AppRoutes = () => {
       <Route path="/musicians/:id" element={<MusicianDetailPage />} />
       <Route path="/musicians/new" element={<MusicianFormPage />} />
       <Route path="/musicians/:id/edit" element={<MusicianFormPage />} />
+      <Route path="/profile/pending-events" element={<PendingEvents />} />
       <Route path="*" element={<EventsPage />} />
     </Routes>
   );
