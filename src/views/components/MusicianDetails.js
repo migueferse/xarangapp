@@ -41,7 +41,7 @@ const MusicianDetailsPage = () => {
 
   return (
     <div className="container">
-      <h2>Detalles del Músico: {musician.name} {musician.lastName}</h2>      
+      <h2>Detalles del Músico: {musician.name} {musician.lastName}</h2>
       <div className="form-group">
         <label>Apodo:</label>
         <p>{musician.nickname || 'No asignado'}</p>
@@ -60,17 +60,19 @@ const MusicianDetailsPage = () => {
       </div>
 
       <div className="form-group">
-        <h3>Historial de Eventos:</h3>
-        {musician.events && musician.events.length > 0 ? (
+        <h3>Eventos aceptados:</h3>
+        {musician.accepted_events && musician.accepted_events.length > 0 ? (
           <ul className="event-history-list">
-            {musician.events.map(event => (
-              <li key={event.id} className="event-history-item">
-                {event.name} - {new Date(event.date).toLocaleDateString()} ({event.place})
+            {musician.accepted_events.map(ev => (
+              <li key={ev.id} className="event-history-item">
+                {ev.event?.name || 'Evento desconocido'} -{" "}
+                {ev.event?.date ? new Date(ev.event.date).toLocaleDateString() : 'Sin fecha'}{" "}
+                ({ev.event?.place || 'Lugar no especificado'})
               </li>
             ))}
           </ul>
         ) : (
-          <p>Este músico no ha participado en ningún evento aún.</p>
+          <p>Este músico no ha aceptado participar en ningún evento aún.</p>
         )}
       </div>
     </div>

@@ -30,7 +30,8 @@ const EventDetailPage = () => {
               name: eventData.name,
               place: eventData.place,
               date: eventData.date,
-              musicians: eventData.musicians.map(m => m.id.toString()) || []
+              musicians: eventData.accepted_musicians.map(am => am.musician?.id.toString()) || []
+
             });
           }
         }

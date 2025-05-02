@@ -68,22 +68,21 @@ const Events = () => {
               <span>{event.name} - {event.date} ({event.place})</span>
               <div>
                 <strong>Músicos:</strong>
-                {event.musicians.length > 0 ? (
+                {event.accepted_musicians && event.accepted_musicians.length > 0 ? (
                   <ul>
-                    {event.musicians.map((musician) => {
-                      const instrumentName = musician.instrument
-                        ? musician.instrument.name
-                        : instruments.find(inst => inst.id === musician.instrument_id)?.name || "Instrumento desconocido";
+                    {event.accepted_musicians.map((entry) => {
+                      const musician = entry.musician;
+                      const instrumentName = musician?.instrument?.name || "Instrumento desconocido";
 
                       return (
                         <li key={musician.id}>
-                          {musician.nickname ? musician.nickname : `${musician.name}`} - {instrumentName}
+                          {musician.nickname || `${musician.name}`} - {instrumentName}
                         </li>
                       );
                     })}
                   </ul>
                 ) : (
-                  <p>No hay músicos asignados a este evento.</p>
+                  <p>No hay músicos que hayan aceptado este evento.</p>
                 )}
               </div>
               {isAdmin && (
