@@ -67,7 +67,13 @@ const PendingEvents = () => {
                 <ul className="pending-event-list">
                     {pendingEvents.map(invitation => (
                         <li key={invitation.id} className="pending-event-item">
-                            <span>{invitation.event.name} - {new Date(invitation.event.date).toLocaleDateString()} ({invitation.event.place})</span>
+                            <span>
+                                Evento: {invitation.event?.name} - {new Date(invitation.event?.date).toLocaleDateString()} ({invitation.event?.place})
+                            </span>
+                            <br />
+                            <span>
+                                Músico: {invitation.musician?.name} {invitation.musician?.lastName} ({invitation.musician?.nickname || invitation.musician?.email})
+                            </span>
                             <div className="actions">
                                 <button onClick={() => handleAccept(invitation.event.id)} className="btn btn-success">Aceptar</button>
                                 <button onClick={() => handleReject(invitation.event.id)} className="btn btn-danger">Rechazar</button>
