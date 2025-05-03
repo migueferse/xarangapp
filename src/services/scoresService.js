@@ -1,8 +1,8 @@
 import API from "../api/axios";
 
-export const getScores = async (token) => {
+const getScores = async (token, params = '') => {
   try {
-    const response = await API.get('/scores', {
+    const response = await API.get(`/scores${params}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -14,35 +14,56 @@ export const getScores = async (token) => {
   }
 };
 
-export const uploadScore = async (file, title, token) => {
+const uploadScore = async (file, title, instrumentId, token) => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('title', title);
+  formData.append('instrument_id', instrumentId);
+
   try {
-    const response = await API.post('/scores', formData, {
+    const response = await API.post("/scores", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data;
   } catch (error) {
-    console.error('Error uploading score:', error.response?.data?.errors || error.message);
+    console.error("Error uploading score:", error);
     throw error;
   }
 };
 
-export const deleteScore = async (id, token) => {
+const deleteScore = async (id, token) => {
   try {
-    const response = await API.delete(`/scores/${id}`, {
+    await API.delete(`/scores/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
   } catch (error) {
     console.error("Error deleting score:", error);
     throw error;
   }
 };
 
+const getInstruments = async (token) => {
+  try {
+    const response = await API.get("/instruments", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching instruments:", error);
+    throw error;
+  }
+};
+
+export default {
+  getScores,
+  uploadScore,
+  deleteScore,
+  getInstruments,
+};

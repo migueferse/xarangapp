@@ -1,13 +1,14 @@
-import { getScores, uploadScore, deleteScore } from '../services/scoresService';
+import scoresService from "../services/scoresService";
 
 const getAuthToken = () => {
   return sessionStorage.getItem('authToken');
 };
 
-export const fetchScores = async () => {
+const fetchScores = async (instrumentId = '') => {
   const token = getAuthToken();
   try {
-    const scores = await getScores(token);
+    const params = instrumentId ? `?instrument_id=${instrumentId}` : '';
+    const scores = await scoresService.getScores(token, params);
     return scores;
   } catch (error) {
     console.error("Error fetching scores:", error);
@@ -15,10 +16,10 @@ export const fetchScores = async () => {
   }
 };
 
-export const handleUploadScore = async (file, title) => {
+const handleUploadScore = async (file, title, instrumentId) => {
   const token = getAuthToken();
   try {
-    const uploadedScore = await uploadScore(file, title, token);
+    const uploadedScore = await scoresService.uploadScore(file, title, instrumentId, token);
     return uploadedScore;
   } catch (error) {
     console.error("Error uploading score:", error);
@@ -26,13 +27,24 @@ export const handleUploadScore = async (file, title) => {
   }
 };
 
-export const handleDeleteScore = async (id) => {
+const handleDeleteScore = async (id) => {
   const token = getAuthToken();
   try {
-    await deleteScore(id, token);
+    await scoresService.deleteScore(id, token);
   } catch (error) {
     console.error("Error deleting score:", error);
     throw error;
   }
 };
 
+const getInstruments = async () => {
+  const token = getAuthToken();
+  return await scoresService.getInstruments(token);
+};
+
+export {
+  fetchScores,
+  getInstruments,
+  handleUploadScore,
+  handleDeleteScore,
+};
