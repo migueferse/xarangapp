@@ -82,7 +82,10 @@ const Scores = () => {
             type="text"
             placeholder="Título de la partitura"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              setUploadMessage(''); // limpiar mensaje
+            }}
             required
           />
           <select
