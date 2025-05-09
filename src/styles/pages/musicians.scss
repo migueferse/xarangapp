@@ -1,0 +1,206 @@
+@import '../abstracts/variables';
+
+.musicians-page {
+  background-color: #f4f6f8;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  .musicians-card {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    animation: fadeInDown 0.6s ease;
+
+    h2 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: $primary-color;
+    }
+
+    .btn {
+      margin: 0.25rem;
+    }
+
+    .list-group-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e3e3e3;
+      border-radius: 0.5rem;
+      margin-bottom: 0.75rem;
+      background-color: #fdfdfd;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .musician-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.95rem;
+
+      .musician-name {
+        font-weight: 600;
+        font-size: 1.05rem;
+      }
+
+      .musician-nickname {
+        font-style: italic;
+        color: #6c757d;
+      }
+
+      .musician-instrument {
+        font-size: 0.9rem;
+        color: #007bff;
+      }
+    }
+
+    .musician-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+
+        label {
+          font-weight: 500;
+          margin-bottom: 0.25rem;
+        }
+
+        input,
+        select {
+          padding: 0.5rem;
+          border: 1px solid #ccc;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+        }
+      }
+
+      .btn-primary {
+        align-self: flex-end;
+        padding: 0.5rem 1.25rem;
+      }
+    }
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.musician-fade {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.button-fade {
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: fadeIn 0.6s ease forwards;
+  animation-delay: 0.4s;
+}
+
+.has-error input,
+.has-error select {
+  border: 1px solid red !important;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .musicians-page {
+    padding: 1rem;
+  }
+
+  .musicians-card {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+
+  .musician-form .form-group input,
+  .musician-form .form-group select {
+    font-size: 0.95rem;
+    padding: 0.75rem;
+  }
+
+  .musician-info {
+    font-size: 0.9rem;
+  }
+
+  .musician-name {
+    font-size: 1rem;
+  }
+
+  .musician-nickname {
+    font-size: 0.85rem;
+  }
+
+  .musician-instrument {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .musicians-card {
+    padding: 1rem;
+  }
+
+  .musician-form .form-group input,
+  .musician-form .form-group select {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  .musician-info {
+    font-size: 0.85rem;
+  }
+
+  .musician-name {
+    font-size: 1rem;
+  }
+
+  .musician-nickname {
+    font-size: 0.75rem;
+  }
+
+  .musician-instrument {
+    font-size: 0.75rem;
+  }
+
+  .btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+  }
+}

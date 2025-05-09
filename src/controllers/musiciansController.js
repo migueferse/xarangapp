@@ -1,7 +1,7 @@
 import musiciansService from "../services/musiciansService";
 
 const getAuthToken = () => {
-  return sessionStorage.getItem('authToken');
+  return sessionStorage.getItem("authToken");
 };
 
 const getAllMusicians = async () => {
@@ -17,12 +17,28 @@ const getAllMusicians = async () => {
 
 const createMusician = async (musicianData) => {
   const token = getAuthToken();
-  return await musiciansService.addMusician(musicianData, token);
+  try {
+    return await musiciansService.addMusician(musicianData, token);
+  } catch (error) {
+    if (error.response && error.response.status === 422) {
+      throw error; // ← importante: permite al componente manejar el error
+    }
+    console.error("Error al crear músico:", error);
+    throw new Error("Error inesperado al crear músico.");
+  }
 };
 
 const updateMusician = async (id, updatedData) => {
   const token = getAuthToken();
-  return await musiciansService.editMusician(id, updatedData, token);
+  try {
+    return await musiciansService.editMusician(id, updatedData, token);
+  } catch (error) {
+    if (error.response && error.response.status === 422) {
+      throw error; // ← importante: permite mostrar errores del backend
+    }
+    console.error("Error al actualizar músico:", error);
+    throw new Error("Error inesperado al actualizar músico.");
+  }
 };
 
 const removeMusician = async (id) => {
@@ -37,7 +53,9 @@ const getMusicianById = async (id) => {
     const instruments = await musiciansService.getInstruments(token);
 
     if (musician) {
-      const selectedInstrument = instruments.find(inst => inst.id === musician.instrument_id);
+      const selectedInstrument = instruments.find(
+        (inst) => inst.id === musician.instrument_id
+      );
       return {
         ...musician,
         instrument_id: selectedInstrument ? selectedInstrument.id : "",
@@ -53,7 +71,10 @@ const getMusicianById = async (id) => {
 const getMusicianDetails = async (id) => {
   const token = getAuthToken();
   try {
-    const musicianDetails = await musiciansService.getMusicianDetails(id, token);
+    const musicianDetails = await musiciansService.getMusicianDetails(
+      id,
+      token
+    );
     return musicianDetails;
   } catch (error) {
     console.error("Error fetching musician details with events:", error);
@@ -69,47 +90,32 @@ const getInstruments = async () => {
 const getPendingEvents = async () => {
   const token = getAuthToken();
   try {
-      return await musiciansService.getPendingEvents(token);
+    return await musiciansService.getPendingEvents(token);
   } catch (error) {
-      console.error("Error fetching pending events:", error);
-      throw error;
+    console.error("Error fetching pending events:", error);
+    throw error;
   }
 };
 
 const acceptEvent = async (eventId) => {
   const token = getAuthToken();
   try {
-      return await musiciansService.acceptEvent(eventId, token);
+    return await musiciansService.acceptEvent(eventId, token);
   } catch (error) {
-      console.error("Error accepting event:", error);
-      throw error;
+    console.error("Error accepting event:", error);
+    throw error;
   }
 };
 
 const rejectEvent = async (eventId) => {
   const token = getAuthToken();
   try {
-      return await musiciansService.rejectEvent(eventId, token);
+    return await musiciansService.rejectEvent(eventId, token);
   } catch (error) {
-      console.error("Error rejecting event:", error);
-      throw error;
+    console.error("Error rejecting event:", error);
+    throw error;
   }
 };
-
-// const createOrUpdateMusician = async (musician) => {
-//   try {
-//     if (musician.id) {
-//       await musiciansService.editMusician(musician.id, musician);
-//       alert("Músico actualizado con éxito.");
-//     } else {
-//       await musiciansService.addMusician(musician);
-//       alert("Nuevo músico creado con éxito.");
-//     }
-//   } catch (error) {
-//     console.error("Error creando o actualizando músico:", error);
-//   }
-// }
-
 
 export default {
   getAllMusicians,
@@ -122,5 +128,4 @@ export default {
   getPendingEvents,
   acceptEvent,
   rejectEvent,
-  // createOrUpdateMusician,
 };

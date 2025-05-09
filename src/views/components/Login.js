@@ -1,142 +1,76 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import loginController from '../../controllers/loginController';
-import '../../styles/login.css';
+import '../../styles/main.scss';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const { handleLogin, loginError } = loginController();
-  const navigate = useNavigate(); // Asegúrate de que useNavigate esté disponible aquí si lo necesitas para redirecciones específicas del componente
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const success = await handleLogin(formData);
     if (success) {
-      // La navegación se maneja en el contexto después del login exitoso
+
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        {loginError && <div className="error-message">{loginError}</div>}
-        <div>
-          <input
-            type="text"
-            placeholder="Email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
+    <div className="login-img container-fluid">
+      <div className="row min-vh-100 align-items-center">
+        <div className="col-md-6 d-none d-md-flex justify-content-center">
+          <img
+            src="/assets/LogoXulivert.png"
+            alt="Ilustración login"
+            className="login-img-animated"
+            style={{ maxHeight: '400px' }}
           />
         </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
+        <div className="col-md-6 d-flex justify-content-center">
+          <form className="login-form shadow p-4 rounded bg-white login-form-animated" onSubmit={handleSubmit}>
+            <h2 className="text-center mb-4 text-primary">Iniciar Sesión</h2>
+            {loginError && <div className="alert alert-danger">{loginError}</div>}
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">Correo electrónico</label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                name="email"
+                placeholder="nombre@correo.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">Contraseña</label>
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                name="password"
+                placeholder="********"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="d-grid gap-2">
+              <button type="submit" className="btn btn-primary">Entrar</button>
+            </div>
+            <div className="mt-3 text-center">
+              <a href="/register" className="text-decoration-none">¿No tienes cuenta? Regístrate</a>
+            </div>
+          </form>
         </div>
-        <div>
-          <button type="submit">
-            Send
-          </button>
-        </div>
-        <div>
-          <a href="/register">
-            Register
-          </a>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };
 
 export default Login;
-// import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import loginController from '../../controllers/loginController';
-// import '../../styles/login.css'
 
-
-// const Login = () => {
-//   const [formData, setFormData] = useState({
-//     email: '',
-//     password: '',
-//   });
-//   const navigate = useNavigate();
-//   const [loginError, setLoginError] = useState('');
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]: value,
-//     });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setLoginError('');
-//     try {
-//       const success = await loginController.handleLogin(formData, navigate, setLoginError);
-//       if (success) {
-//         // navigate('/events');
-//       }
-//     } catch (error) {
-//       console.error('Error general en el inicio de sesión:', error);
-//       setLoginError('Error inesperado al iniciar sesión.');
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <form onSubmit={handleSubmit}>        
-//         {loginError && <div>{loginError}</div>}
-//         <div>
-//           <input
-//             type="text"
-//             placeholder="Email"
-//             id="email"
-//             name="email"
-//             value={formData.email}
-//             onChange={handleChange}
-//           />
-//         </div>
-//         <div>
-//           <input
-//             type="password"
-//             placeholder="Password"
-//             id="password"
-//             name="password"
-//             value={formData.password}
-//             onChange={handleChange}
-//           />
-//         </div>
-//         <div>
-//           <button type="submit">
-//             Send
-//           </button>
-//         </div>
-//         <div>
-//           <a href="/register">
-//             Register
-//           </a>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Login;
