@@ -89,7 +89,7 @@ const MusiciansPage = () => {
                   )}
                   <div className="musician-instrument">{musician.instrument.name}</div>
                 </div>
-                <div className="btn-group">
+                <div className="form-buttons">
                   <button onClick={() => handleDetails(musician.id)} className="btn btn-info btn-sm">Detalles</button>
                   {isAdmin && (
                     <>

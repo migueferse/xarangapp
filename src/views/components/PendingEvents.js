@@ -86,7 +86,7 @@ const PendingEvents = () => {
                     <strong>Músico:</strong> {invitation.musician?.name} {invitation.musician?.lastName} ({invitation.musician?.nickname || invitation.musician?.email})
                   </div>
                 </div>
-                <div className="btn-group">
+                <div className="form-buttons">
                   <button onClick={() => handleAccept(invitation.event.id)} className="btn btn-success btn-sm">Aceptar</button>
                   <button onClick={() => handleReject(invitation.event.id)} className="btn btn-danger btn-sm">Rechazar</button>
                 </div>

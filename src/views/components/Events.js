@@ -106,7 +106,7 @@ const EventsPage = () => {
                   </div>
                 </div>
                 {isAdmin && (
-                  <div className="btn-group">
+                  <div className="form-buttons">
                     <button onClick={() => handleEdit(event.id)} className="btn btn-warning btn-sm">Editar</button>
                     <button onClick={() => openDeleteModal(event)} className="btn btn-danger btn-sm">Eliminar</button>
                   </div>
