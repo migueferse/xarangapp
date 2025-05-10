@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import eventsController from "../../controllers/eventsController";
-import "../../styles/calendar.css";
+import "../../styles/main.scss";
 
 const EventsCalendar = () => {
   const [events, setEvents] = useState([]);
@@ -43,19 +43,22 @@ const EventsCalendar = () => {
 
   return (
     <div className="calendar-container">
-      <h2>Calendario de Eventos</h2>
-      <Calendar
-        onChange={setDate}
-        value={date}
-        tileContent={tileContent}
-      />
+      <h2 className="calendar-title">Calendario de Eventos</h2>
+      <div className="calendar-wrapper">
+        <Calendar
+          onChange={setDate}
+          value={date}
+          tileContent={tileContent}
+          className="custom-calendar"
+        />
+      </div>
 
       <div className="event-details">
         <h3>Eventos del {date.toLocaleDateString()}</h3>
         {selectedDayEvents.length > 0 ? (
-          <ul>
+          <ul className="event-list">
             {selectedDayEvents.map((event) => (
-              <li key={event.id}>
+              <li key={event.id} className="event-item">
                 <strong>{event.name}</strong> - {event.place}
               </li>
             ))}
@@ -69,19 +72,3 @@ const EventsCalendar = () => {
 };
 
 export default EventsCalendar;
-
-
-
-
-
-// import React from 'react';
-
-// const Calendar = () => {
-//   return (
-//     <div>
-//       <h1>Welcome to the Calendar Component!</h1>
-//     </div>
-//   );
-// };
-
-// export default Calendar;
