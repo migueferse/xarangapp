@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContext';
 import eventsController from '../../controllers/eventsController';
 import musiciansController from "../../controllers/musiciansController";
-import '../../styles/events.css';
+import ConfirmModal from "./ConfirmModal";
+import '../../styles/main.scss';
 
-const Events = () => {
+const EventsPage = () => {
   const [events, setEvents] = useState([]);
   const [instruments, setInstruments] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const navigate = useNavigate();
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
@@ -36,70 +39,95 @@ const Events = () => {
     navigate(`/events/${id}`);
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este evento?")) {
-      try {
-        await eventsController.removeEvent(id);
-        const updatedEvents = await eventsController.getAllEvents();
-        setEvents(updatedEvents);
-      } catch (error) {
-        console.error("Error deleting event:", error);
-        if (error.response && error.response.status === 403) {
-          alert("No tienes permisos para eliminar este evento.");
-        } else {
-          alert("Error al eliminar el evento.");
-        }
+  const openDeleteModal = (event) => {
+    setSelectedEvent(event);
+    setShowModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowModal(false);
+    setSelectedEvent(null);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await eventsController.removeEvent(selectedEvent.id);
+      const updatedEvents = await eventsController.getAllEvents();
+      setEvents(updatedEvents);
+      closeDeleteModal();
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      if (error.response && error.response.status === 403) {
+        alert("No tienes permisos para eliminar este evento.");
+      } else {
+        alert("Error al eliminar el evento.");
       }
+      closeDeleteModal();
     }
   };
 
   return (
-    <div className="container">
-      <h2>Eventos</h2>
-      {isAdmin && (
-        <>
-          <button onClick={handleCreate} className="btn btn-primary mb-3">Crear Evento</button>
-        </>
-      )}
-      <ul className="event-list">
-        {events.length > 0 ? (
-          events.map((event) => (
-            <li key={event.id} className="event-item">
-              <span>{event.name} - {event.date} ({event.place})</span>
-              <div>
-                <strong>Músicos:</strong>
-                {event.accepted_musicians && event.accepted_musicians.length > 0 ? (
-                  <ul>
-                    {event.accepted_musicians.map((entry) => {
-                      const musician = entry.musician;
-                      const instrumentName = musician?.instrument?.name || "Instrumento desconocido";
+    <div className="events-page">
+      <div className="events-card">
+        <h2>Eventos</h2>
 
-                      return (
-                        <li key={musician.id}>
-                          {musician.nickname || `${musician.name}`} - {instrumentName}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <p>No hay músicos que hayan aceptado este evento.</p>
-                )}
-              </div>
-              {isAdmin && (
-                <>
-                  <button onClick={() => handleEdit(event.id)} className="btn btn-warning">Editar</button>
-                  <button onClick={() => handleDelete(event.id)} className="btn btn-danger">Eliminar</button>
-                </>
-              )}
-
-            </li>
-          ))
-        ) : (
-          <p>No hay eventos disponibles</p>
+        {isAdmin && (
+          <div className="text-end mb-3">
+            <button onClick={handleCreate} className="btn btn-primary button-fade">
+              Crear Evento
+            </button>
+          </div>
         )}
-      </ul>
+
+        {events.length > 0 ? (
+          <ul className="list-group">
+            {events.map((event) => (
+              <li key={event.id} className="list-group-item event-fade">
+                <div className="event-info">
+                  <div className="event-name">{event.name}</div>
+                  <div className="event-date-place text-muted">{event.date} – {event.place}</div>
+                  <div className="event-musicians">
+                    <strong>Músicos:</strong>
+                    {event.accepted_musicians?.length > 0 ? (
+                      <ul>
+                        {event.accepted_musicians.map((entry) => {
+                          const musician = entry.musician;
+                          const instrument = musician?.instrument?.name || "Instrumento desconocido";
+                          return (
+                            <li key={musician.id}>
+                              {musician.nickname || musician.name} - {instrument}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    ) : (
+                      <p className="text-muted">No hay músicos aceptados para este evento.</p>
+                    )}
+                  </div>
+                </div>
+                {isAdmin && (
+                  <div className="btn-group">
+                    <button onClick={() => handleEdit(event.id)} className="btn btn-warning btn-sm">Editar</button>
+                    <button onClick={() => openDeleteModal(event)} className="btn btn-danger btn-sm">Eliminar</button>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-center">No hay eventos disponibles.</p>
+        )}
+      </div>
+
+      <ConfirmModal
+        isOpen={showModal}
+        title="Confirmar Eliminación"
+        message={`¿Estás seguro de que deseas eliminar el evento ${selectedEvent?.name}?`}
+        onConfirm={confirmDelete}
+        onCancel={closeDeleteModal}
+      />
     </div>
   );
 };
 
-export default Events;
+export default EventsPage;

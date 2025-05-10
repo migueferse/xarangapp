@@ -155,7 +155,7 @@ const MusicianFormPage = () => {
         <form onSubmit={handleSubmit} className="musician-form">
           {/* Nombre */}
           <div className={renderFieldClass("name")}>
-            <label>Nombre:</label>
+            <label>Nombre: *</label>
             <input
               type="text"
               name="name"
@@ -215,7 +215,7 @@ const MusicianFormPage = () => {
 
           {/* Teléfono */}
           <div className={renderFieldClass("phone")}>
-            <label>Teléfono:</label>
+            <label>Teléfono: *</label>
             <input
               type="text"
               name="phone"
@@ -229,7 +229,7 @@ const MusicianFormPage = () => {
 
           {/* Email */}
           <div className={renderFieldClass("email")}>
-            <label>Correo Electrónico:</label>
+            <label>Correo Electrónico: *</label>
             <input
               type="email"
               name="email"

@@ -1,10 +1,5 @@
-// $primary: #e63946;
-// $secondary: #457b9d;
-
-// Luego, importa Bootstrap
 @import 'bootstrap/scss/bootstrap';
 
-// Después, importa tus propios estilos
 @import './abstracts/variables';
 @import './abstracts/mixins';
 @import './base/reset';
@@ -13,6 +8,7 @@
 @import './layout/header';
 @import './pages/login';
 @import './pages/musicians';
+@import './pages/events';
 
 body {
   font-family: $font-family-primary;
