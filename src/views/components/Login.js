@@ -4,17 +4,38 @@ import '../../styles/main.scss';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const [emailValid, setEmailValid] = useState(true);
+  const [passwordValid, setPasswordValid] = useState(true);
   const { handleLogin, loginError } = loginController();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setEmailValid(emailRegex.test(value));
+    }
+
+    if (name === 'password') {
+      setPasswordValid(value.trim() !== '');
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    const isEmailValid = formData.email.trim() !== '';
+    const isPasswordValid = formData.password.trim() !== '';
+    setEmailValid(isEmailValid);
+    setPasswordValid(isPasswordValid);
+
+    if (!isEmailValid || !isPasswordValid) {
+      return;
+    }
+
     const success = await handleLogin(formData);
     if (success) {
-
     }
   };
 
@@ -37,30 +58,39 @@ const Login = () => {
               <label htmlFor="email" className="form-label">Correo electrónico</label>
               <input
                 type="email"
-                className="form-control"
+                className={`form-control ${!emailValid ? 'is-invalid' : ''}`}
                 id="email"
                 name="email"
                 placeholder="nombre@correo.com"
                 value={formData.email}
-                onChange={handleChange}
-                required
+                onChange={handleChange}                
               />
+              {!emailValid && formData.email.trim() === '' && (
+                <div className="invalid-feedback">El correo electrónico no puede estar vacío.</div>
+              )}
+              {!emailValid && formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && (
+                <div className="invalid-feedback">Por favor, introduce un correo válido.</div>
+              )}
             </div>
             <div className="mb-3">
               <label htmlFor="password" className="form-label">Contraseña</label>
               <input
                 type="password"
-                className="form-control"
+                className={`form-control ${!passwordValid ? 'is-invalid' : ''}`}
                 id="password"
                 name="password"
                 placeholder="********"
                 value={formData.password}
                 onChange={handleChange}
-                required
               />
+              {!passwordValid && formData.password.trim() === '' && (
+                <div className="invalid-feedback">La contraseña no puede estar vacía.</div>
+              )}
             </div>
             <div className="d-grid gap-2">
-              <button type="submit" className="btn btn-primary">Entrar</button>
+              <button type="submit" className="btn btn-primary" disabled={!emailValid || !passwordValid}>
+                Entrar
+              </button>
             </div>
             <div className="mt-3 text-center">
               <a href="/register" className="text-decoration-none">¿No tienes cuenta? Regístrate</a>
@@ -73,4 +103,3 @@ const Login = () => {
 };
 
 export default Login;
-
