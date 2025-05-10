@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContext';
 import musiciansController from "../../controllers/musiciansController";
+import ConfirmModal from "./ConfirmModal"; // Asegúrate de que la ruta es correcta
 import '../../styles/main.scss';
 
 const MusiciansPage = () => {
   const [musicians, setMusicians] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedMusician, setSelectedMusician] = useState(null);
   const navigate = useNavigate();
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
@@ -35,20 +38,30 @@ const MusiciansPage = () => {
     navigate(`/musicians/${id}`);
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este músico?")) {
-      try {
-        await musiciansController.removeMusician(id);
-        const updatedMusicians = await musiciansController.getAllMusicians();
-        setMusicians(updatedMusicians);
-      } catch (error) {
-        console.error("Error deleting musician:", error);
-        if (error.response && error.response.status === 403) {
-          alert("No tienes permisos para eliminar este músico.");
-        } else {
-          alert("Error al eliminar el músico.");
-        }
+  const openDeleteModal = (musician) => {
+    setSelectedMusician(musician);
+    setShowModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowModal(false);
+    setSelectedMusician(null);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await musiciansController.removeMusician(selectedMusician.id);
+      const updatedMusicians = await musiciansController.getAllMusicians();
+      setMusicians(updatedMusicians);
+      closeDeleteModal();
+    } catch (error) {
+      console.error("Error deleting musician:", error);
+      if (error.response && error.response.status === 403) {
+        alert("No tienes permisos para eliminar este músico.");
+      } else {
+        alert("Error al eliminar el músico.");
       }
+      closeDeleteModal();
     }
   };
 
@@ -59,7 +72,9 @@ const MusiciansPage = () => {
 
         {isAdmin && (
           <div className="text-end mb-3">
-            <button onClick={handleCreate} className="btn btn-primary button-fade">Agregar Músico</button>
+            <button onClick={handleCreate} className="btn btn-primary button-fade">
+              Agregar Músico
+            </button>
           </div>
         )}
 
@@ -79,7 +94,7 @@ const MusiciansPage = () => {
                   {isAdmin && (
                     <>
                       <button onClick={() => handleEdit(musician.id)} className="btn btn-warning btn-sm">Editar</button>
-                      <button onClick={() => handleDelete(musician.id)} className="btn btn-danger btn-sm">Eliminar</button>
+                      <button onClick={() => openDeleteModal(musician)} className="btn btn-danger btn-sm">Eliminar</button>
                     </>
                   )}
                 </div>
@@ -90,6 +105,14 @@ const MusiciansPage = () => {
           <p className="text-center">No hay músicos disponibles.</p>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={showModal}
+        title="Confirmar Eliminación"
+        message={`¿Estás seguro de que deseas eliminar al músico ${selectedMusician?.name}?`}
+        onConfirm={confirmDelete}
+        onCancel={closeDeleteModal}
+      />
     </div>
   );
 };
