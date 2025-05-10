@@ -31,22 +31,22 @@
   }
 
   .btn-success {
-    background-color: #28a745;
+    background-color: $btn-backgroud-accept;
     color: white;
     border: none;
 
     &:hover {
-      background-color: darken(#28a745, 5%);
+      background-color: darken($btn-backgroud-accept, 5%);
     }
   }
 
   .btn-danger {
-    background-color: #dc3545;
+    background-color: $btn-backgroud-reject;
     color: white;
     border: none;
 
     &:hover {
-      background-color: darken(#dc3545, 5%);
+      background-color: darken($btn-backgroud-reject, 5%);
     }
   }
 
