@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../contexts/AuthContext';
 import musiciansController from "../../controllers/musiciansController";
-import ConfirmModal from "./ConfirmModal"; // Asegúrate de que la ruta es correcta
+import ConfirmModal from "./ConfirmModal";
 import '../../styles/main.scss';
 
 const MusiciansPage = () => {
@@ -11,10 +11,13 @@ const MusiciansPage = () => {
   const [selectedMusician, setSelectedMusician] = useState(null);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const isAuthenticated = !!user;
   const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
     const fetchMusicians = async () => {
+      if (!isAuthenticated) return;
+
       try {
         const musiciansData = await musiciansController.getAllMusicians();
         setMusicians(musiciansData);
@@ -24,7 +27,7 @@ const MusiciansPage = () => {
     };
 
     fetchMusicians();
-  }, []);
+  }, [isAuthenticated]);
 
   const handleCreate = () => {
     navigate("/musicians/new");
@@ -64,6 +67,17 @@ const MusiciansPage = () => {
       closeDeleteModal();
     }
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="musicians-page">
+        <div className="musicians-card">
+          <h2>Músicos</h2>
+          <p className="text-center">Debes iniciar sesión para ver la lista de músicos.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="musicians-page">

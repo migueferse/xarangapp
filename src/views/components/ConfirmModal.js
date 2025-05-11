@@ -10,7 +10,7 @@ const ConfirmModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
         <h4>{title}</h4>
         <p>{message}</p>
         <div className="modal-actions">
-          <button onClick={onConfirm} className="btn btn-danger">Confirmar</button>
+          <button onClick={onConfirm} className="btn btn-danger">Ok</button>
           <button onClick={onCancel} className="btn btn-secondary">Cancelar</button>
         </div>
       </div>

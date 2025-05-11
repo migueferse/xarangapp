@@ -13,10 +13,13 @@ const EventsPage = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const isAuthenticated = !!user;
   const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!isAuthenticated) return;
+
       try {
         const eventsData = await eventsController.getAllEvents();
         setEvents(eventsData);
@@ -29,7 +32,7 @@ const EventsPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [isAuthenticated]);
 
   const handleCreate = () => {
     navigate("/events/new");
@@ -65,6 +68,17 @@ const EventsPage = () => {
       closeDeleteModal();
     }
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="events-page">
+        <div className="events-card">
+          <h2>Eventos</h2>
+          <p className="text-center">Debes iniciar sesión para ver los eventos.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="events-page">

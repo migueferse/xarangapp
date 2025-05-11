@@ -11,11 +11,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 40%;
+
+    @media (max-width: 768px) {
+      width: 100%;
+    }
   }
 
   .logo {
-    margin-right: auto;
-  
+    margin-right: 1rem;
+
     img {
       height: 40px;
       width: auto;
@@ -103,6 +108,14 @@
           cursor: pointer;
         }
       }
+
+      .nav-user {
+        color: white;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        white-space: nowrap;
+      }
+
     }
 
     &.open {
@@ -114,7 +127,7 @@
     .menu-toggle {
       display: block;
     }
-  
+
     .nav {
       position: absolute;
       top: 100%;
@@ -127,14 +140,14 @@
       visibility: hidden;
       transition: max-height 0.4s ease, opacity 0.3s ease, visibility 0.3s ease;
       z-index: 99;
-  
+
       .nav-list {
         flex-direction: column;
         gap: 1rem;
         align-items: flex-start;
         padding: 1rem;
       }
-  
+
       &.open {
         max-height: 500px;
         opacity: 1;

@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import '../../styles/main.scss';
 
 const Header = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -14,9 +14,7 @@ const Header = () => {
     <header className="site-header">
       <div className="container header-container">
         <div className="logo">
-          <NavLink to="/">
-            <img src="/assets/LogoXulivert.png" alt="Xulivert Logo" />
-          </NavLink>
+          <img src="/assets/LogoXulivert.png" alt="Xulivert Logo" />
         </div>
 
         <button className="menu-toggle" onClick={toggleMenu} aria-label="Menú">
@@ -33,7 +31,10 @@ const Header = () => {
               <li><NavLink to="/profile/pending-events" className="nav-link" onClick={closeMenu}>Invitaciones</NavLink></li>
             )}
             {isAuthenticated ? (
-              <li><button onClick={logout} className="nav-link btn-link">Cerrar Sesión</button></li>
+              <>
+                <li className="nav-user">👤 {user?.name || user?.nickname || user?.email}</li>
+                <li><button onClick={logout} className="logout-button">Cerrar Sesión</button></li>
+              </>
             ) : (
               <li><NavLink to="/login" className="nav-link" onClick={closeMenu}>Login</NavLink></li>
             )}

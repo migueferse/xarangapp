@@ -2,14 +2,19 @@ import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import eventsController from "../../controllers/eventsController";
+import { useAuth } from "../../contexts/AuthContext";
 import "../../styles/main.scss";
 
 const EventsCalendar = () => {
   const [events, setEvents] = useState([]);
   const [date, setDate] = useState(new Date());
+  const { user } = useAuth();
+  const isAuthenticated = !!user;
 
   useEffect(() => {
     const fetchEvents = async () => {
+      if (!isAuthenticated) return;
+
       try {
         const eventsData = await eventsController.getAllEvents();
         setEvents(eventsData);
@@ -19,7 +24,7 @@ const EventsCalendar = () => {
     };
 
     fetchEvents();
-  }, []);
+  }, [isAuthenticated]);
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -36,6 +41,15 @@ const EventsCalendar = () => {
     }
     return null;
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="calendar-container">
+        <h2 className="calendar-title">Calendario de Eventos</h2>
+        <p className="text-center">Debes iniciar sesión para ver el calendario de eventos.</p>
+      </div>
+    );
+  }
 
   const selectedDayEvents = events.filter(
     (event) => formatDate(new Date(event.date)) === formatDate(date)

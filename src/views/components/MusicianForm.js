@@ -119,14 +119,9 @@ const MusicianFormPage = () => {
         if (error.response && error.response.status === 422) {
           const serverErrors = error.response.data.errors;
           const newErrors = {};
-
-          if (serverErrors.email && serverErrors.email.includes("The email has already been taken.")) {
-            newErrors.email = "El correo electrónico ya está registrado.";
-          } else {
-            Object.entries(serverErrors).forEach(([field, messages]) => {
-              newErrors[field] = Array.isArray(messages) ? messages[0] : messages;
-            });
-          }
+          Object.entries(serverErrors).forEach(([field, messages]) => {
+            newErrors[field] = Array.isArray(messages) ? messages[0] : messages;
+          });
 
           setErrors((prev) => ({
             ...prev,

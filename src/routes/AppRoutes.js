@@ -26,7 +26,7 @@ const AppRoutes = () => {
       <Route path="/musicians/new" element={<MusicianFormPage />} />
       <Route path="/musicians/:id/edit" element={<MusicianFormPage />} />
       <Route path="/profile/pending-events" element={<PendingEvents />} />
-      <Route path="*" element={<EventsPage />} />
+      <Route path="*" element={<LoginPage />} />
     </Routes>
   );
 };

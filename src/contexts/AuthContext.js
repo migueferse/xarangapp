@@ -21,14 +21,14 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async (token) => {
     try {
-        const userData = await userService.getUser(token); // Llama al servicio para obtener los datos del usuario
+        const userData = await userService.getUser(token);
         setUser(userData);
     } catch (error) {
         console.error('Error al obtener la información del usuario:', error);
         setUser(null);
         setIsAuthenticated(false);
         sessionStorage.removeItem('authToken');
-        navigate('/login'); // Redirigir si falla la obtención del usuario (token inválido, etc.)
+        navigate('/login');
     }
 };
 
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
         sessionStorage.setItem('authToken', response.token);
         setIsAuthenticated(true);
         await fetchUser(response.token);
-        navigate('/events'); // Redirigir después del login
+        navigate('/events');
         return true;
       } else {
         setIsAuthenticated(false);
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     const token = sessionStorage.getItem('authToken');
     try {
-      await authService.logout(token); // Pasa el token para la invalidación en el backend
+      await authService.logout(token);
       sessionStorage.removeItem('authToken');
       setIsAuthenticated(false);
       navigate('/login');
