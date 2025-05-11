@@ -35,20 +35,6 @@ const getEventById = async (id) => {
   return await eventsService.getEventById(id, token);
 };
 
-// const createOrUpdateEvent = (event) => {
-//   if (event.id) {
-//     eventsService.editEvent(event.id, event);
-//     alert("Evento actualizado con éxito.");
-//   } else {
-//     eventsService.addEvent(event);
-//     alert("Nuevo evento creado con éxito.");
-//   }
-// };
-
-// const addMusicianToEvent = (eventId, musicianId) => {
-//   eventsService.addMusicianToEvent(eventId, musicianId);
-// };
-
 export default {
   getAllEvents,
   createEvent,

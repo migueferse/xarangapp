@@ -21,7 +21,7 @@ const createMusician = async (musicianData) => {
     return await musiciansService.addMusician(musicianData, token);
   } catch (error) {
     if (error.response && error.response.status === 422) {
-      throw error; // ← importante: permite al componente manejar el error
+      throw error;
     }
     console.error("Error al crear músico:", error);
     throw new Error("Error inesperado al crear músico.");
@@ -34,7 +34,7 @@ const updateMusician = async (id, updatedData) => {
     return await musiciansService.editMusician(id, updatedData, token);
   } catch (error) {
     if (error.response && error.response.status === 422) {
-      throw error; // ← importante: permite mostrar errores del backend
+      throw error;
     }
     console.error("Error al actualizar músico:", error);
     throw new Error("Error inesperado al actualizar músico.");

@@ -73,19 +73,10 @@ const deleteEvent = async (id, token) => {
   }  
 };
 
-// const addMusicianToEvent = (eventId, musicianId) => {
-//   const event = getEventById(eventId);
-//   if (event) {
-//     event.musicians.push(musicianId);
-//   }
-// };
-
-
 export default {
   getEvents,
   getEventById,
   addEvent,
   editEvent,
   deleteEvent,
-  // addMusicianToEvent,
 };

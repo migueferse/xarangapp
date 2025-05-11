@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import registerController from "../../controllers/registerController";
-import ConfirmModal from "./ConfirmModal"; // Asegúrate de que esta importación esté correcta
-import "../../styles/main.scss"; // Usar los mismos estilos globales
+import ConfirmModal from "./ConfirmModal";
+import "../../styles/main.scss";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +16,7 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [registerError, setRegisterError] = useState("");
-  const [showModal, setShowModal] = useState(false); // Estado para mostrar el modal
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -80,7 +80,7 @@ const Register = () => {
       const result = await registerController.handleRegister(formData, setRegisterError);
       
       if (result.success) {
-        setShowModal(true); // Mostrar el modal de éxito
+        setShowModal(true);
       }
     }
   };
@@ -88,15 +88,13 @@ const Register = () => {
   const renderFieldClass = (field) =>
     touched[field] && errors[field] ? "form-group has-error" : "form-group";
 
-  // Función que cierra el modal y redirige al login
   const handleModalConfirm = () => {
-    setShowModal(false); // Cerrar el modal
-    navigate("/login");  // Redirigir a la página de login
+    setShowModal(false);
+    navigate("/login");
   };
 
-  // Función para cancelar y cerrar el modal sin redirigir
   const handleModalCancel = () => {
-    setShowModal(false); // Cerrar el modal sin hacer nada más
+    setShowModal(false);
   };
 
   return (
@@ -115,7 +113,6 @@ const Register = () => {
             <h2 className="text-center mb-4 text-primary">Registrarse</h2>
             {registerError && <div className="alert alert-danger">{registerError}</div>}
 
-            {/* Nombre */}
             <div className={renderFieldClass("name")}>
               <label htmlFor="name" className="form-label">Nombre</label>
               <input
@@ -132,7 +129,6 @@ const Register = () => {
               )}
             </div>
 
-            {/* Email */}
             <div className={renderFieldClass("email")}>
               <label htmlFor="email" className="form-label">Correo electrónico</label>
               <input
@@ -149,7 +145,6 @@ const Register = () => {
               )}
             </div>
 
-            {/* Contraseña */}
             <div className={renderFieldClass("password")}>
               <label htmlFor="password" className="form-label">Contraseña</label>
               <input
@@ -166,7 +161,6 @@ const Register = () => {
               )}
             </div>
 
-            {/* Confirmar Contraseña */}
             <div className={renderFieldClass("password_confirmation")}>
               <label htmlFor="password_confirmation" className="form-label">Confirmar Contraseña</label>
               <input
@@ -183,7 +177,6 @@ const Register = () => {
               )}
             </div>
 
-            {/* Rol */}
             <div className="mb-3">
               <label htmlFor="role" className="form-label">Rol</label>
               <select
@@ -211,13 +204,12 @@ const Register = () => {
         </div>
       </div>
 
-      {/* Modal de Confirmación usando el componente ConfirmModal */}
       <ConfirmModal
         isOpen={showModal}
         title="Registro Exitoso"
         message="¡Te has registrado con éxito! Ahora puedes iniciar sesión."
-        onConfirm={handleModalConfirm} // Confirmar y redirigir al login
-        onCancel={handleModalCancel}  // Cerrar modal sin redirigir
+        onConfirm={handleModalConfirm}
+        onCancel={handleModalCancel}
       />
     </div>
   );

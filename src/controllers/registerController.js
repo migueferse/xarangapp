@@ -6,10 +6,10 @@ const handleRegister = async (formData, setRegisterError) => {
     console.log('response', response);
 
     if (response && response.status === 201 && response.data && response.data.token) {
-      return { success: true };  // Devolver un objeto que indica éxito
+      return { success: true };
     } else {
       setRegisterError('Error al registrarse: Respuesta inesperada del servidor.');
-      return { success: false }; // Devolver un objeto que indica error
+      return { success: false };
     }
   } catch (error) {
     console.error('Error al registrar usuario en el controlador:', error);
@@ -23,7 +23,7 @@ const handleRegister = async (formData, setRegisterError) => {
       setRegisterError('Error al registrarse. Por favor, inténtalo de nuevo.');
     }
 
-    return { success: false }; // Devolver error
+    return { success: false };
   }
 };
 

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import musiciansController from '../../controllers/musiciansController';
-import ConfirmModal from './ConfirmModal'; // Asegúrate de que la importación esté correcta
+import ConfirmModal from './ConfirmModal';
 import '../../styles/main.scss';
 
 const PendingEvents = () => {
   const [pendingEvents, setPendingEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false); // Estado para mostrar el modal
-  const [modalMessage, setModalMessage] = useState(''); // Estado para el mensaje del modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
     const fetchPendingEvents = async () => {
@@ -34,11 +34,11 @@ const PendingEvents = () => {
       const updatedEvents = await musiciansController.getPendingEvents();
       setPendingEvents(updatedEvents);
       setModalMessage("Has aceptado el evento.");
-      setShowModal(true); // Mostrar el modal
+      setShowModal(true);
     } catch (error) {
       console.error("Error al aceptar el evento:", error);
       setModalMessage("Error al aceptar el evento.");
-      setShowModal(true); // Mostrar el modal en caso de error
+      setShowModal(true);
     }
   };
 
@@ -48,16 +48,16 @@ const PendingEvents = () => {
       const updatedEvents = await musiciansController.getPendingEvents();
       setPendingEvents(updatedEvents);
       setModalMessage("Has rechazado el evento.");
-      setShowModal(true); // Mostrar el modal
+      setShowModal(true);
     } catch (error) {
       console.error("Error al rechazar el evento:", error);
       setModalMessage("Error al rechazar el evento.");
-      setShowModal(true); // Mostrar el modal en caso de error
+      setShowModal(true);
     }
   };
 
   const handleModalConfirm = () => {
-    setShowModal(false); // Cerrar el modal
+    setShowModal(false);
   };
 
   if (loading) {
@@ -109,12 +109,11 @@ const PendingEvents = () => {
         )}
       </div>
 
-      {/* Modal de Confirmación usando el componente ConfirmModal */}
       <ConfirmModal
         isOpen={showModal}
         title="Resultado de la Acción"
         message={modalMessage}
-        onConfirm={handleModalConfirm} // Cerrar modal
+        onConfirm={handleModalConfirm}
       />
     </div>
   );

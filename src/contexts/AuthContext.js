@@ -16,21 +16,21 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(!!token);
     if (token) {
       fetchUser(token);
-  }
+    }
   }, []);
 
   const fetchUser = async (token) => {
     try {
-        const userData = await userService.getUser(token);
-        setUser(userData);
+      const userData = await userService.getUser(token);
+      setUser(userData);
     } catch (error) {
-        console.error('Error al obtener la información del usuario:', error);
-        setUser(null);
-        setIsAuthenticated(false);
-        sessionStorage.removeItem('authToken');
-        navigate('/login');
+      console.error('Error al obtener la información del usuario:', error);
+      setUser(null);
+      setIsAuthenticated(false);
+      sessionStorage.removeItem('authToken');
+      navigate('/login');
     }
-};
+  };
 
   const login = async (credentials) => {
     try {

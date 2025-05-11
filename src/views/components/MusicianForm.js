@@ -148,7 +148,6 @@ const MusicianFormPage = () => {
       <div className="musicians-card">
         <h2>{id ? "Editar Músico" : "Crear Nuevo Músico"}</h2>
         <form onSubmit={handleSubmit} className="musician-form">
-          {/* Nombre */}
           <div className={renderFieldClass("name")}>
             <label>Nombre: *</label>
             <input
@@ -162,7 +161,6 @@ const MusicianFormPage = () => {
             )}
           </div>
 
-          {/* Apellidos */}
           <div className="form-group">
             <label>Apellidos:</label>
             <input
@@ -173,7 +171,6 @@ const MusicianFormPage = () => {
             />
           </div>
 
-          {/* Apodo */}
           <div className="form-group">
             <label>Apodo:</label>
             <input
@@ -184,7 +181,6 @@ const MusicianFormPage = () => {
             />
           </div>
 
-          {/* Instrumento */}
           <div className={renderFieldClass("instrument_id")}>
             <label>Instrumento:</label>
             <select
@@ -208,7 +204,6 @@ const MusicianFormPage = () => {
             )}
           </div>
 
-          {/* Teléfono */}
           <div className={renderFieldClass("phone")}>
             <label>Teléfono: *</label>
             <input
@@ -222,7 +217,6 @@ const MusicianFormPage = () => {
             )}
           </div>
 
-          {/* Email */}
           <div className={renderFieldClass("email")}>
             <label>Correo Electrónico: *</label>
             <input
@@ -236,7 +230,6 @@ const MusicianFormPage = () => {
             )}
           </div>
 
-          {/* Botón */}
           <div className="form-buttons">
             <button type="submit" className="btn btn-primary">
               {id ? "Guardar Cambios" : "Crear Músico"}
