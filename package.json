@@ -43,6 +43,5 @@
   },
   "devDependencies": {
     "eslint": "^8.57.1"
-  },
-  "homepage": "https://xarangapp.netlify.app"
+  }
 }
