@@ -73,10 +73,12 @@ const deleteEvent = async (id, token) => {
   }  
 };
 
-export default {
+const eventsService =  {
   getEvents,
   getEventById,
   addEvent,
   editEvent,
   deleteEvent,
 };
+
+export default eventsService

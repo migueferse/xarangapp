@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import loginService from '../services/loginService';
 import authService from '../services/authService';
 import userService from '../services/userService';
@@ -11,15 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = sessionStorage.getItem('authToken');
-    setIsAuthenticated(!!token);
-    if (token) {
-      fetchUser(token);
-    }
-  }, []);
-
-  const fetchUser = async (token) => {
+  const fetchUser = useCallback(async (token) => {
     try {
       const userData = await userService.getUser(token);
       setUser(userData);
@@ -30,7 +22,15 @@ export const AuthProvider = ({ children }) => {
       sessionStorage.removeItem('authToken');
       navigate('/login');
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('authToken');
+    setIsAuthenticated(!!token);
+    if (token) {
+      fetchUser(token);
+    }
+  }, [fetchUser]);
 
   const login = async (credentials) => {
     try {
@@ -59,6 +59,7 @@ export const AuthProvider = ({ children }) => {
       await authService.logout(token);
       sessionStorage.removeItem('authToken');
       setIsAuthenticated(false);
+      setUser(null);
       navigate('/login');
     } catch (error) {
       console.error('Error al cerrar sesión:', error);

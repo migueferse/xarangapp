@@ -27,6 +27,8 @@ const handleRegister = async (formData, setRegisterError) => {
   }
 };
 
-export default {
+const registerController = {
   handleRegister,
 };
+
+export default registerController

@@ -11,6 +11,8 @@ const register = async (userData) => {
   }
 };
 
-export default {
+const registerService = {
   register,
 };
+
+export default registerService

@@ -13,6 +13,8 @@ const logout = async (token) => {
   }
 };
 
-export default {
+const authService = {
   logout,
 };
+
+export default authService

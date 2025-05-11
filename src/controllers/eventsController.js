@@ -35,12 +35,12 @@ const getEventById = async (id) => {
   return await eventsService.getEventById(id, token);
 };
 
-export default {
+const eventsController = {
   getAllEvents,
   createEvent,
   updateEvent,
   removeEvent,
   getEventById,
-  // createOrUpdateEvent,
-  // addMusicianToEvent,
 };
+
+export default eventsController;

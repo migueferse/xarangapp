@@ -141,7 +141,7 @@ const rejectEvent = async (eventId, token) => {
   }
 };
 
-export default {
+const musiciansService = {
   getMusicians,
   getMusicianById,
   getMusicianDetails,
@@ -153,3 +153,5 @@ export default {
   acceptEvent,
   rejectEvent,
 };
+
+export default musiciansService

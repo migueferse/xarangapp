@@ -117,7 +117,7 @@ const rejectEvent = async (eventId) => {
   }
 };
 
-export default {
+const musiciansController = {
   getAllMusicians,
   createMusician,
   updateMusician,
@@ -129,3 +129,5 @@ export default {
   acceptEvent,
   rejectEvent,
 };
+
+export default musiciansController

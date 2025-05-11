@@ -14,6 +14,7 @@ const getUser = async (token) => {
     }
 };
 
-export default {
+const userService = {
     getUser,
 };
+export default userService

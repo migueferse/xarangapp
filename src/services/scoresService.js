@@ -61,9 +61,11 @@ const getInstruments = async (token) => {
   }
 };
 
-export default {
+const scoresService = {
   getScores,
   uploadScore,
   deleteScore,
   getInstruments,
 };
+
+export default scoresService

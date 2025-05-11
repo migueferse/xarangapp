@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { fetchScores, handleUploadScore, handleDeleteScore, getInstruments } from '../../controllers/scoresController';
-import { useAuth } from '../../contexts/AuthContext'; // Importa el contexto
+import React, { useEffect, useState, useCallback } from 'react';
+import {
+  fetchScores,
+  handleUploadScore,
+  handleDeleteScore,
+  getInstruments
+} from '../../controllers/scoresController';
+import { useAuth } from '../../contexts/AuthContext';
 import '../../styles/main.scss';
 
 const Scores = () => {
-  const { isAuthenticated } = useAuth(); // Obtiene el estado de autenticación
+  const { isAuthenticated } = useAuth();
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [file, setFile] = useState(null);
@@ -14,12 +19,12 @@ const Scores = () => {
   const [instruments, setInstruments] = useState([]);
   const [filterInstrumentId, setFilterInstrumentId] = useState('');
 
-  const loadScores = async (instrumentId = '') => {
-    if (!isAuthenticated) return; // No intentes cargar si no está autenticado
+  const loadScores = useCallback(async (instrumentId = '') => {
+    if (!isAuthenticated) return;
     const data = await fetchScores(instrumentId);
     setScores(data);
     setLoading(false);
-  };
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const loadInitialData = async () => {
@@ -36,7 +41,7 @@ const Scores = () => {
       }
     };
     loadInitialData();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, loadScores]);
 
   const handleFilterChange = async (e) => {
     const selectedId = e.target.value;
@@ -74,7 +79,11 @@ const Scores = () => {
         <>
           <div className="filter-section">
             <label>Filtrar por instrumento: </label>
-            <select className="filter-select" value={filterInstrumentId} onChange={handleFilterChange}>
+            <select
+              className="filter-select"
+              value={filterInstrumentId}
+              onChange={handleFilterChange}
+            >
               <option value="">Todos</option>
               {instruments.map((instr) => (
                 <option key={instr.id} value={instr.id}>
@@ -130,7 +139,9 @@ const Scores = () => {
               {scores.map((score) => (
                 <li key={score.id} className="score-item">
                   <div className="score-info">
-                    <span className="score-title">{score.title} ({score.instrument_name || 'Sin instrumento'})</span>
+                    <span className="score-title">
+                      {score.title} ({score.instrument_name || 'Sin instrumento'})
+                    </span>
                     <a href={score.public_url} download className="download-link">
                       Descargar PDF
                     </a>

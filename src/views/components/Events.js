@@ -8,7 +8,7 @@ import '../../styles/main.scss';
 
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
-  const [instruments, setInstruments] = useState([]);
+  const [, setInstruments] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const navigate = useNavigate();

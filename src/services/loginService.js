@@ -10,6 +10,8 @@ const login = async (credentials) => {
   }
 };
 
-export default {
+const loginService = {
   login,
 };
+
+export default loginService
