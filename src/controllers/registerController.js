@@ -3,7 +3,6 @@ import registerService from '../services/registerService';
 const handleRegister = async (formData, setRegisterError) => {
   try {
     const response = await registerService.register(formData);
-    console.log('response', response);
 
     if (response && response.status === 201 && response.data && response.data.token) {
       return { success: true };

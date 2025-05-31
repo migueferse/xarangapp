@@ -7,7 +7,6 @@ const getMusicians = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log('Musicos', response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching musicians:", error);
@@ -45,7 +44,6 @@ const getMusicianDetails = async (id, token) => {
 
 const addMusician = async (newMusician, token) => {
   try {
-    console.log(newMusician);
     const response = await API.post("/musicians", newMusician, {
       headers: {
         Authorization: `Bearer ${token}`,

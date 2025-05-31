@@ -111,7 +111,7 @@ const PendingEvents = () => {
 
       <ConfirmModal
         isOpen={showModal}
-        title="Resultado de la Acción"
+        title="Invitación"
         message={modalMessage}
         onConfirm={handleModalConfirm}
       />

@@ -7,7 +7,6 @@ const getEvents = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log('Events', response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching events:", error);
@@ -30,9 +29,7 @@ const getEventById = async (id, token) => {
 };
 
 const addEvent = async (newEvent, token) => {
-  console.log('Created', newEvent);
   try {
-    console.log(newEvent);
     const response = await API.post("/events", newEvent, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,7 +43,6 @@ const addEvent = async (newEvent, token) => {
 };
 
 const editEvent = async (id, updatedEvent, token) => {
-  console.log('Updated',updatedEvent);
   try {
     const response = await API.put(`/events/${id}`, updatedEvent, {
       headers: {
